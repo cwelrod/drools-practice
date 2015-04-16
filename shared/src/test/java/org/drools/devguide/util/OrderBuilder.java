@@ -17,11 +17,11 @@ import org.drools.devguide.eshop.model.OrderState;
  */
 public class OrderBuilder {
     
-    private final ClientBuilder superBuilder;
+    private final CustomerBuilder superBuilder;
     private final Order instance;
-    private Optional<OrderItemBuilder> orderItemBuilder = Optional.empty();
+    private Optional<OrderLineBuilder> orderLineBuilder = Optional.empty();
     
-    public OrderBuilder(ClientBuilder superBuilder) {
+    public OrderBuilder(CustomerBuilder superBuilder) {
         this.superBuilder = superBuilder;
         
         this.instance = new Order();
@@ -42,22 +42,22 @@ public class OrderBuilder {
         return this;
     }
     
-    public OrderItemBuilder newItem(){
-        if (this.orderItemBuilder.isPresent()){
-            this.instance.getItems().add(this.orderItemBuilder.get().build());
+    public OrderLineBuilder newItem(){
+        if (this.orderLineBuilder.isPresent()){
+            this.instance.getItems().add(this.orderLineBuilder.get().build());
         }
-        this.orderItemBuilder = Optional.of(new OrderItemBuilder(this));
-        return this.orderItemBuilder.get();
+        this.orderLineBuilder = Optional.of(new OrderLineBuilder(this));
+        return this.orderLineBuilder.get();
     }
     
     public Order build(){
-        if (this.orderItemBuilder.isPresent()){
-            this.instance.getItems().add(this.orderItemBuilder.get().build());
+        if (this.orderLineBuilder.isPresent()){
+            this.instance.getItems().add(this.orderLineBuilder.get().build());
         }
         return this.instance;
     }
     
-    public ClientBuilder end(){
+    public CustomerBuilder end(){
         return superBuilder;
     }
 }

@@ -12,25 +12,25 @@ package org.drools.devguide.eshop.model;
 public class Coupon {
     public enum CouponType{DISCOUNT, TWOFORONE, POINTS };
     
-    private Client client;
+    private Customer customer;
     private Order order;
     private CouponType type;
 
     public Coupon() {
     }
 
-    public Coupon(Client client, Order order, CouponType type) {
-        this.client = client;
+    public Coupon(Customer customer, Order order, CouponType type) {
+        this.customer = customer;
         this.order = order;
         this.type = type;
     }
 
-    public Client getClient() {
-        return client;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Order getOrder() {
@@ -51,7 +51,7 @@ public class Coupon {
 
     @Override
     public String toString() {
-        return "Coupon{" + "client=" + client + ", order=" + order + ", type=" + type + '}';
+        return "Coupon{" + "customer=" + customer + ", order=" + order + ", type=" + type + '}';
     }
     
     

@@ -1,6 +1,6 @@
 package org.drools.devguide;
 
-import org.drools.devguide.eshop.model.Client;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 import org.drools.devguide.eshop.model.OrderState;
 import org.drools.devguide.eshop.model.SuspiciousOperation;
@@ -13,9 +13,9 @@ global OrderService orderService;
 
 rule "Detect suspicious amount operations"
 when
-    $c: Client()
+    $c: Customer()
     Number( doubleValue > amountThreshold ) from accumulate (
-        Order ( state != OrderState.COMPLETED, $total: total) from orderService.getOrdersByClient($c.id),
+        Order ( state != OrderState.COMPLETED, $total: total) from orderService.getOrdersByCustomer($c.id),
         sum($total)
     )
 then
@@ -26,6 +26,6 @@ query "Get All Suspicious Operations"
     $so: SuspiciousOperation()
 end
 
-query "Get Client Suspicious Operations" (String $clientId)
-    $so: SuspiciousOperation(client.id == $clientId)
+query "Get Customer Suspicious Operations" (String $customerId)
+    $so: SuspiciousOperation(customer.id == $customerId)
 end

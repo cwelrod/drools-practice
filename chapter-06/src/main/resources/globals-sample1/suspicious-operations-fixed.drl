@@ -1,15 +1,15 @@
 package org.drools.devguide;
 
-import org.drools.devguide.eshop.model.Client;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 import org.drools.devguide.eshop.model.OrderState;
 import org.drools.devguide.eshop.model.SuspiciousOperation;
 
 rule "Detect suspicious amount operations"
 when
-    $c: Client()
+    $c: Customer()
     Number( doubleValue > 10000.0 ) from accumulate (
-        Order ( client == $c, state != OrderState.COMPLETED, $total: total) from $c.orders,
+        Order ( customer == $c, state != OrderState.COMPLETED, $total: total) from $c.orders,
         sum($total)
     )
 then

@@ -2,22 +2,22 @@ package org.drools.devguide.eshop.model;
 
 import java.io.Serializable;
 
-public class OrderItem implements Serializable {
+public class OrderLine implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Product product;
+	private Item item;
 	private Integer quantity;
 	
-	public OrderItem() {
+	public OrderLine() {
 	}
 	
-	public Product getProduct() {
-		return product;
+	public Item getItem() {
+		return item;
 	}
 	
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 	
 	public Integer getQuantity() {
@@ -32,7 +32,7 @@ public class OrderItem implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		result = prime * result + ((item == null) ? 0 : item.hashCode());
 		result = prime * result
 				+ ((quantity == null) ? 0 : quantity.hashCode());
 		return result;
@@ -46,11 +46,11 @@ public class OrderItem implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OrderItem other = (OrderItem) obj;
-		if (product == null) {
-			if (other.product != null)
+		OrderLine other = (OrderLine) obj;
+		if (item == null) {
+			if (other.item != null)
 				return false;
-		} else if (!product.equals(other.product))
+		} else if (!item.equals(other.item))
 			return false;
 		if (quantity == null) {
 			if (other.quantity != null)
@@ -62,7 +62,7 @@ public class OrderItem implements Serializable {
 
 	@Override
 	public String toString() {
-		return "OrderItem [product=" + product + ", quantity=" + quantity + "]";
+		return "OrderLine [item=" + item + ", quantity=" + quantity + "]";
 	}
 	
 	

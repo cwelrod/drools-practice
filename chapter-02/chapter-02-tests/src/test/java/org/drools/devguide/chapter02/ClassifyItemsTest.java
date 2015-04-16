@@ -1,4 +1,4 @@
-package org.drools.devguide.chapter01;
+package org.drools.devguide.chapter02;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -7,8 +7,8 @@ package org.drools.devguide.chapter01;
  */
 
 import org.drools.devguide.BaseTest;
-import org.drools.devguide.eshop.model.Product;
-import org.drools.devguide.eshop.model.Product.Category;
+import org.drools.devguide.eshop.model.Item;
+import org.drools.devguide.eshop.model.Item.Category;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -18,15 +18,15 @@ import org.kie.api.runtime.KieSession;
  *
  * @author salaboy
  */
-public class ClassifyProductsTest extends BaseTest {
+public class ClassifyItemsTest extends BaseTest {
 
     @Test
     public void simpleClassification() {
         KieSession kSession = createDefaultSession();
-        Product p = new Product("A", 123.0, 234.0);
-        kSession.insert(p);
+        Item item = new Item("A", 123.0, 234.0);
+        kSession.insert(item);
         int fired = kSession.fireAllRules();
         assertThat(1, is(fired));
-        assertThat(Category.LOW_RANGE, is(p.getCategory()));
+        assertThat(Category.LOW_RANGE, is(item.getCategory()));
     }
 }

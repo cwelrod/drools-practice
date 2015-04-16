@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Client implements Serializable {
+public class Customer implements Serializable {
 
         public enum Category{GOLD, SILVER, BRONZE};
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,7 @@ public class Client implements Serializable {
 	private List<Order> orders = new ArrayList<>();
         private Category category;
 	
-	public Client() {
+	public Customer() {
 	}
 
         public String getId() {
@@ -68,7 +68,7 @@ public class Client implements Serializable {
                 if (getClass() != obj.getClass()) {
                     return false;
                 }
-                final Client other = (Client) obj;
+                final Customer other = (Customer) obj;
                 if (!Objects.equals(this.id, other.id)) {
                     return false;
                 }
@@ -82,6 +82,6 @@ public class Client implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Client [name=" + name + ", orders=" + orders + "]";
+		return "Customer [name=" + name + ", orders=" + orders + "]";
 	}
 }

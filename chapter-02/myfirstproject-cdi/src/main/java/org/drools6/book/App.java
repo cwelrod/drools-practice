@@ -2,7 +2,7 @@ package org.drools6.book;
 
 import java.io.PrintStream;
 import javax.inject.Inject;
-import org.drools.devguide.eshop.model.Product;
+import org.drools.devguide.eshop.model.Item;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.kie.api.cdi.KSession;
@@ -17,12 +17,12 @@ public class App
     KieSession kSession;
     
     public void go(PrintStream out){
-        Product p = new Product("A", 123.0,234.0);
-        out.println( "Product Category: " + p.getCategory()); 
-        kSession.insert(p);
+        Item item = new Item("A", 123.0,234.0);
+        out.println( "Item Category: " + item.getCategory()); 
+        kSession.insert(item);
         int fired = kSession.fireAllRules();
         out.println( "Number of Rules executed = " + fired );
-        out.println( "Product Category: " + p.getCategory()); 
+        out.println( "Item Category: " + item.getCategory()); 
     }
     
     public static void main( String[] args )

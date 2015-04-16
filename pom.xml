@@ -51,7 +51,7 @@
             </dependency>
             <dependency>
                 <groupId>org.drools.devguide</groupId>
-                <artifactId>chapter-01-kjar</artifactId>
+                <artifactId>chapter-02-kjar</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

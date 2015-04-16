@@ -1,6 +1,6 @@
 package org.drools6.book;
 
-import org.drools.devguide.eshop.model.Product;
+import org.drools.devguide.eshop.model.Item;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -15,12 +15,12 @@ public class App
         KieContainer kContainer = ks.getKieClasspathContainer();
         KieSession kSession =  kContainer.newKieSession();
         
-        Product p = new Product("A", 123.0,234.0);
-        System.out.println( "Product Category: " + p.getCategory()); 
-        kSession.insert(p);
+        Item item = new Item("A", 123.0,234.0);
+        System.out.println( "Item Category: " + item.getCategory()); 
+        kSession.insert(item);
         int fired = kSession.fireAllRules();
         System.out.println( "Number of Rules executed = " + fired );
-        System.out.println( "Product Category: " + p.getCategory()); 
+        System.out.println( "Item Category: " + item.getCategory()); 
 
     }
 }

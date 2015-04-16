@@ -13,5 +13,6 @@ import org.drools.devguide.eshop.model.Order;
  * @author esteban
  */
 public interface OrderService {
-    public Collection<Order> getOrdersByClient(String clientId);
+
+    public Collection<Order> getOrdersByCustomer(String customerId);
 }

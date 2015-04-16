@@ -6,18 +6,18 @@ public class Stock implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Long productId;
+	private Long itemId;
 	private Integer quantity;
 	
 	public Stock() {
 	}
 	
-	public Long getProductId() {
-		return productId;
+	public Long getItemId() {
+		return itemId;
 	}
 	
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setItemId(Long itemId) {
+		this.itemId = itemId;
 	}
 	
 	public Integer getQuantity() {
@@ -33,7 +33,7 @@ public class Stock implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((productId == null) ? 0 : productId.hashCode());
+				+ ((itemId == null) ? 0 : itemId.hashCode());
 		result = prime * result
 				+ ((quantity == null) ? 0 : quantity.hashCode());
 		return result;
@@ -48,10 +48,10 @@ public class Stock implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Stock other = (Stock) obj;
-		if (productId == null) {
-			if (other.productId != null)
+		if (itemId == null) {
+			if (other.itemId != null)
 				return false;
-		} else if (!productId.equals(other.productId))
+		} else if (!itemId.equals(other.itemId))
 			return false;
 		if (quantity == null) {
 			if (other.quantity != null)
@@ -63,6 +63,6 @@ public class Stock implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Stock [productId=" + productId + ", quantity=" + quantity + "]";
+		return "Stock [itemId=" + itemId + ", quantity=" + quantity + "]";
 	}
 }

@@ -3,7 +3,7 @@ package org.drools.devguide.eshop.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Product implements Serializable {
+public class Item implements Serializable {
 
     public enum Category {
         NA, LOW_RANGE, MID_RANGE, HIGH_RANGE
@@ -16,10 +16,10 @@ public class Product implements Serializable {
     private Double salePrice;
     private Category category;
 
-    public Product() {
+    public Item() {
     }
 
-    public Product(String name, Double cost, Double salePrice) {
+    public Item(String name, Double cost, Double salePrice) {
         this.name = name;
         this.cost = cost;
         this.salePrice = salePrice;
@@ -85,7 +85,7 @@ public class Product implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Product other = (Product) obj;
+        final Item other = (Item) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -106,7 +106,7 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", cost=" + cost
+        return "Item{" + "id=" + id + ", name=" + name + ", cost=" + cost
                 + ", salePrice=" + salePrice + ", category=" + category + '}';
     }
 

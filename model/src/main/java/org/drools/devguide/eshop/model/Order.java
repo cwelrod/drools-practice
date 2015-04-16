@@ -9,21 +9,21 @@ public class Order implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Client client;
+	private Customer customer;
 	private Date date;
-	private List<OrderItem> items;
+	private List<OrderLine> items;
 	private OrderState state;
         private Discount discount;
 	
 	public Order() {
 	}
 
-        public Client getClient() {
-            return client;
+        public Customer getCustomer() {
+            return customer;
         }
 
-        public void setClient(Client client) {
-            this.client = client;
+        public void setCustomer(Customer customer) {
+            this.customer = customer;
         }
 
         public Date getDate() {
@@ -34,11 +34,11 @@ public class Order implements Serializable {
             this.date = date;
         }
 
-	public List<OrderItem> getItems() {
+	public List<OrderLine> getItems() {
 		return items;
 	}
 
-	public void setItems(List<OrderItem> items) {
+	public void setItems(List<OrderLine> items) {
 		this.items = items;
 	}
         
@@ -54,7 +54,7 @@ public class Order implements Serializable {
         
         public double getTotal(){
             return this.getItems().stream()
-                    .mapToDouble(item -> item.getProduct().getSalePrice() * item.getQuantity())
+                    .mapToDouble(item -> item.getItem().getSalePrice() * item.getQuantity())
                     .sum();
         }
 
@@ -83,7 +83,7 @@ public class Order implements Serializable {
                     return false;
                 }
                 final Order other = (Order) obj;
-                if (!Objects.equals(this.client, other.client)) {
+                if (!Objects.equals(this.customer, other.customer)) {
                     return false;
                 }
                 if (!Objects.equals(this.date, other.date)) {
@@ -100,6 +100,6 @@ public class Order implements Serializable {
 
         @Override
         public String toString() {
-                return "Order [" + "client=" + client + ", date=" + date + ", items=" + items + ", state=" + state + ']';
+                return "Order [" + "customer=" + customer + ", date=" + date + ", items=" + items + ", state=" + state + ']';
         }
 }

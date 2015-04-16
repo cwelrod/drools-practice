@@ -9,7 +9,7 @@ public class Provider implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long providerId;
-	private List<Product> products = new ArrayList<Product>();
+	private List<Item> items = new ArrayList<Item>();
 	private String name;
 	private Integer rating;
 	
@@ -24,12 +24,12 @@ public class Provider implements Serializable {
 		this.providerId = providerId;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<Item> getItems() {
+		return items;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 	public String getName() {
@@ -54,7 +54,7 @@ public class Provider implements Serializable {
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result
-				+ ((products == null) ? 0 : products.hashCode());
+				+ ((items == null) ? 0 : items.hashCode());
 		result = prime * result
 				+ ((providerId == null) ? 0 : providerId.hashCode());
 		result = prime * result + ((rating == null) ? 0 : rating.hashCode());
@@ -75,10 +75,10 @@ public class Provider implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (products == null) {
-			if (other.products != null)
+		if (items == null) {
+			if (other.items != null)
 				return false;
-		} else if (!products.equals(other.products))
+		} else if (!items.equals(other.items))
 			return false;
 		if (providerId == null) {
 			if (other.providerId != null)
@@ -95,7 +95,7 @@ public class Provider implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Provider [providerId=" + providerId + ", products=" + products
+		return "Provider [providerId=" + providerId + ", items=" + items
 				+ ", name=" + name + ", rating=" + rating + "]";
 	}
 }

@@ -1,4 +1,4 @@
-package org.drools.devguide.chapter01;
+package org.drools.devguide.chapter02;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -9,10 +9,10 @@ package org.drools.devguide.chapter01;
 import java.util.ArrayList;
 import java.util.List;
 import org.drools.devguide.BaseTest;
-import org.drools.devguide.eshop.model.Client;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
-import org.drools.devguide.eshop.model.OrderItem;
-import org.drools.devguide.eshop.model.Product;
+import org.drools.devguide.eshop.model.OrderLine;
+import org.drools.devguide.eshop.model.Item;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -32,20 +32,20 @@ public class SimpleOrderDiscountTest extends BaseTest{
         KieSession kSession = createDefaultSession();
         Order o = new Order();
         
-        Product pA = new Product("A", 700.0,800.0);
-        Product pB = new Product("B", 800.0,850.0);
-        List<OrderItem> items = new ArrayList<>();
-        OrderItem item1 = new OrderItem();
-        item1.setProduct(pA);
+        Item pA = new Item("A", 700.0,800.0);
+        Item pB = new Item("B", 800.0,850.0);
+        List<OrderLine> items = new ArrayList<>();
+        OrderLine item1 = new OrderLine();
+        item1.setItem(pA);
         item1.setQuantity(2);
         items.add(item1);
-        OrderItem item2 = new OrderItem();
-        item1.setProduct(pB);
+        OrderLine item2 = new OrderLine();
+        item1.setItem(pB);
         item1.setQuantity(1);
         items.add(item2);
         o.setItems(items);
-        Client c = new Client();
-        o.setClient(c);
+        Customer c = new Customer();
+        o.setCustomer(c);
         
         kSession.insert(pA);
         kSession.insert(pB);

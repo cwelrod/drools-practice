@@ -19,7 +19,7 @@ public class SuspiciousOperation {
         SUSPICIOUS_FREQUENCY;
     }
     
-    private Client client;
+    private Customer customer;
     private Type type;
     private Date date;
     private String comment;
@@ -27,23 +27,23 @@ public class SuspiciousOperation {
     public SuspiciousOperation() {
     }
 
-    public SuspiciousOperation(Client client, Type type) {
-        this.client = client;
+    public SuspiciousOperation(Customer customer, Type type) {
+        this.customer = customer;
         this.type = type;
     }
 
-    public SuspiciousOperation(Client client, Type type, Date date) {
-        this.client = client;
+    public SuspiciousOperation(Customer customer, Type type, Date date) {
+        this.customer = customer;
         this.type = type;
         this.date = date;
     }
     
-    public Client getClient() {
-        return client;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Type getType() {
@@ -73,7 +73,7 @@ public class SuspiciousOperation {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.client);
+        hash = 47 * hash + Objects.hashCode(this.customer);
         hash = 47 * hash + Objects.hashCode(this.type);
         hash = 47 * hash + Objects.hashCode(this.date);
         hash = 47 * hash + Objects.hashCode(this.comment);
@@ -89,7 +89,7 @@ public class SuspiciousOperation {
             return false;
         }
         final SuspiciousOperation other = (SuspiciousOperation) obj;
-        if (!Objects.equals(this.client, other.client)) {
+        if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
         if (this.type != other.type) {
@@ -106,7 +106,7 @@ public class SuspiciousOperation {
 
     @Override
     public String toString() {
-        return "SuspiciousOperation [" + "client=" + client + ", type=" + type + ", date=" + date + ", comment=" + comment + ']';
+        return "SuspiciousOperation [" + "customer=" + customer + ", type=" + type + ", date=" + date + ", comment=" + comment + ']';
     }
     
 }

@@ -5,20 +5,20 @@
  */
 package org.drools.devguide.util;
 
-import org.drools.devguide.eshop.model.Product;
+import org.drools.devguide.eshop.model.Item;
 
 /**
  *
  * @author esteban
  */
-public class ProductBuilder {
-    private final OrderItemBuilder superBuilder;
-    private final Product instance;
+public class ItemBuilder {
+    private final OrderLineBuilder superBuilder;
+    private final Item instance;
 
-    public ProductBuilder(OrderItemBuilder superBuilder) {
+    public ItemBuilder(OrderLineBuilder superBuilder) {
         this.superBuilder = superBuilder;
         
-        this.instance = new Product();
+        this.instance = new Item();
         //default values
         this.instance.setId(1L);
         this.instance.setCost(0.0);
@@ -26,31 +26,31 @@ public class ProductBuilder {
         this.instance.setSalePrice(0.0);
     }
     
-    public ProductBuilder withId(long id){
+    public ItemBuilder withId(long id){
         this.instance.setId(id);
         return this;
     }
     
-    public ProductBuilder withCost(double cost){
+    public ItemBuilder withCost(double cost){
         this.instance.setCost(cost);
         return this;
     }
     
-    public ProductBuilder withName(String name){
+    public ItemBuilder withName(String name){
         this.instance.setName(name);
         return this;
     }
     
-    public ProductBuilder withSalePrice(double salePrice){
+    public ItemBuilder withSalePrice(double salePrice){
         this.instance.setSalePrice(salePrice);
         return this;
     }
     
-    public Product build(){
+    public Item build(){
         return this.instance;
     }
     
-    public OrderItemBuilder end(){
+    public OrderLineBuilder end(){
         return superBuilder;
     } 
 

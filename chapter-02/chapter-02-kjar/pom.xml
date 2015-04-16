@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.drools.devguide</groupId>
-        <artifactId>chapter-01</artifactId>
+        <artifactId>chapter-02</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
     <artifactId>chapter-02-kjar</artifactId>

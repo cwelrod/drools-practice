@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.Set;
 import org.drools.devguide.BaseTest;
 import static java.util.stream.Collectors.toList;
-import org.drools.devguide.eshop.model.Client;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 import org.drools.devguide.eshop.model.OrderState;
 import org.drools.devguide.eshop.model.SuspiciousOperation;
 import org.drools.devguide.eshop.service.AuditService;
 import org.drools.devguide.eshop.service.OrderService;
-import org.drools.devguide.util.ClientBuilder;
+import org.drools.devguide.util.CustomerBuilder;
 import org.drools.devguide.util.OrderBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -36,34 +36,34 @@ public class GlobalsTest extends BaseTest{
     @Test
     public void detectSuspiciousAmountOperationsWithFixedThresholdTest() {
 
-        //Create a client with PENDING orders for a value > 10000
-        Client clientA = new ClientBuilder()
+        //Create a customer with PENDING orders for a value > 10000
+        Customer customerA = new CustomerBuilder()
                 .withId("A")
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
                         .withQuantity(2)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(5000.0)
                         .end()
                     .end()
                     .newItem()
                         .withQuantity(5)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(800.0)
                     .end()
                 .end()
             .end()
         .build();
 
-        //Create a client with PENDING orders for a value < 10000 
-        Client clientB = new ClientBuilder()
+        //Create a customer with PENDING orders for a value < 10000 
+        Customer customerB = new CustomerBuilder()
                 .withId("B")
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
                         .withQuantity(1)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(1000.0)
                         .end()
                     .end()
@@ -73,8 +73,8 @@ public class GlobalsTest extends BaseTest{
         //Create a session and insert the 2 patients.
         KieSession ksession = this.createSession("suspicious-operations-fixed");
 
-        ksession.insert(clientA);
-        ksession.insert(clientB);
+        ksession.insert(customerA);
+        ksession.insert(customerB);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -86,12 +86,12 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, a SuspiciousOperation object is now 
-        //present. This object belongs to Client "A".
+        //present. This object belongs to Customer "A".
         suspiciousOperations
                 = this.getFactsFromSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(1));
-        assertThat(suspiciousOperations.iterator().next().getClient().getId(),
+        assertThat(suspiciousOperations.iterator().next().getCustomer().getId(),
                 is("A"));
 
         ksession.dispose();
@@ -101,34 +101,34 @@ public class GlobalsTest extends BaseTest{
     @Test
     public void detectSuspiciousAmountOperationsWithVariableThresholdTest() {
 
-        //Create a client with PENDING orders for a value > 10000
-        Client clientA = new ClientBuilder()
+        //Create a customer with PENDING orders for a value > 10000
+        Customer customerA = new CustomerBuilder()
                 .withId("A")
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
                         .withQuantity(2)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(5000.0)
                     .end()
                 .end()
                     .newItem()
                         .withQuantity(5)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(800.0)
                     .end()
                 .end()
             .end()
         .build();
 
-        //Create a client with PENDING orders for a value < 10000 
-        Client clientB = new ClientBuilder()
+        //Create a customer with PENDING orders for a value < 10000 
+        Customer customerB = new CustomerBuilder()
                 .withId("B")
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
                         .withQuantity(1)
-                        .withProduct()
+                        .withItem()
                         .withSalePrice(1000.0)
                     .end()
                 .end()
@@ -142,8 +142,8 @@ public class GlobalsTest extends BaseTest{
         //to 500.0
         ksession.setGlobal("amountThreshold", 500.0);
 
-        ksession.insert(clientA);
-        ksession.insert(clientB);
+        ksession.insert(customerA);
+        ksession.insert(customerB);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -155,13 +155,13 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, 2 SuspiciousOperation objects are now 
-        //present. These objects belong to Client "A" and "B".
+        //present. These objects belong to Customer "A" and "B".
         suspiciousOperations
                 = this.getFactsFromSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(
-                suspiciousOperations.stream().map(so -> so.getClient().getId()).collect(toList())
+                suspiciousOperations.stream().map(so -> so.getCustomer().getId()).collect(toList())
                 , containsInAnyOrder("A", "B")
         );
         
@@ -170,30 +170,30 @@ public class GlobalsTest extends BaseTest{
     @Test
     public void detectSuspiciousAmountOperationsWithOrderServiceTest() {
 
-        //Create 2 clients without any Order. Orders are going to be provided
+        //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Client clientA = new ClientBuilder().withId("A").build();
-        Client clientB = new ClientBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId("A").build();
+        Customer customerB = new CustomerBuilder().withId("B").build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByClient(String clientId) {
-                switch (clientId){
+            public Collection<Order> getOrdersByCustomer(String customerId) {
+                switch (customerId){
                     case "A":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(2)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(5000.0)
                                         .end()
                                     .end()
                                     .newItem()
                                         .withQuantity(5)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(800.0)
                                         .end()
                                     .end()
@@ -205,7 +205,7 @@ public class GlobalsTest extends BaseTest{
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(1)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(1000.0)
                                     .end()
                                 .end()
@@ -226,8 +226,8 @@ public class GlobalsTest extends BaseTest{
         ksession.setGlobal("amountThreshold", 500.0);
         ksession.setGlobal("orderService", orderService);
 
-        ksession.insert(clientA);
-        ksession.insert(clientB);
+        ksession.insert(customerA);
+        ksession.insert(customerB);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -239,13 +239,13 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, 2 SuspiciousOperation objects are now 
-        //present. These objects belong to Client "A" and "B".
+        //present. These objects belong to Customer "A" and "B".
         suspiciousOperations
                 = this.getFactsFromSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(
-                suspiciousOperations.stream().map(so -> so.getClient().getId()).collect(toList())
+                suspiciousOperations.stream().map(so -> so.getCustomer().getId()).collect(toList())
                 , containsInAnyOrder("A", "B")
         );
         
@@ -254,30 +254,30 @@ public class GlobalsTest extends BaseTest{
     @Test
     public void detectSuspiciousAmountOperationsCollectInGlobalList() {
 
-        //Create 2 clients without any Order. Orders are going to be provided
+        //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Client clientA = new ClientBuilder().withId("A").build();
-        Client clientB = new ClientBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId("A").build();
+        Customer customerB = new CustomerBuilder().withId("B").build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByClient(String clientId) {
-                switch (clientId){
+            public Collection<Order> getOrdersByCustomer(String customerId) {
+                switch (customerId){
                     case "A":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(2)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(5000.0)
                                         .end()
                                     .end()
                                     .newItem()
                                         .withQuantity(5)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(800.0)
                                         .end()
                                     .end()
@@ -289,7 +289,7 @@ public class GlobalsTest extends BaseTest{
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(1)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(1000.0)
                                     .end()
                                 .end()
@@ -315,8 +315,8 @@ public class GlobalsTest extends BaseTest{
         Set<SuspiciousOperation> results = new HashSet<>();
         ksession.setGlobal("results", results);
 
-        ksession.insert(clientA);
-        ksession.insert(clientB);
+        ksession.insert(customerA);
+        ksession.insert(customerB);
 
         //Let's fire any activated rule now.
         ksession.fireAllRules();
@@ -325,7 +325,7 @@ public class GlobalsTest extends BaseTest{
         //present in the 'results' Set.
         assertThat(results, hasSize(2));
         assertThat(
-                results.stream().map(so -> so.getClient().getId()).collect(toList())
+                results.stream().map(so -> so.getCustomer().getId()).collect(toList())
                 , containsInAnyOrder("A", "B")
         );
         
@@ -334,30 +334,30 @@ public class GlobalsTest extends BaseTest{
     @Test
     public void detectSuspiciousAmountOperationsNotifyAuditService() {
 
-        //Create 2 clients without any Order. Orders are going to be provided
+        //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Client clientA = new ClientBuilder().withId("A").build();
-        Client clientB = new ClientBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId("A").build();
+        Customer customerB = new CustomerBuilder().withId("B").build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByClient(String clientId) {
-                switch (clientId){
+            public Collection<Order> getOrdersByCustomer(String customerId) {
+                switch (customerId){
                     case "A":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(2)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(5000.0)
                                         .end()
                                     .end()
                                     .newItem()
                                         .withQuantity(5)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(800.0)
                                         .end()
                                     .end()
@@ -369,7 +369,7 @@ public class GlobalsTest extends BaseTest{
                                     .withSate(OrderState.PENDING)
                                     .newItem()
                                         .withQuantity(1)
-                                        .withProduct()
+                                        .withItem()
                                         .withSalePrice(1000.0)
                                     .end()
                                 .end()
@@ -403,8 +403,8 @@ public class GlobalsTest extends BaseTest{
         ksession.setGlobal("orderService", orderService);
         ksession.setGlobal("auditService", auditService);
         
-        ksession.insert(clientA);
-        ksession.insert(clientB);
+        ksession.insert(customerA);
+        ksession.insert(customerB);
 
         //Let's fire any activated rule now.
         ksession.fireAllRules();
@@ -413,7 +413,7 @@ public class GlobalsTest extends BaseTest{
         //present in the 'results' Set.
         assertThat(results, hasSize(2));
         assertThat(
-                results.stream().map(so -> so.getClient().getId()).collect(toList())
+                results.stream().map(so -> so.getCustomer().getId()).collect(toList())
                 , containsInAnyOrder("A", "B")
         );
         
