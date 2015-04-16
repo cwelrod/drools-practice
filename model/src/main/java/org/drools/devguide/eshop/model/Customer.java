@@ -1,14 +1,12 @@
 package org.drools.devguide.eshop.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Customer implements Serializable {
 
     public enum Category {
-        NA,GOLD, SILVER, BRONZE
+        NA, GOLD, SILVER, BRONZE
     };
     private static final long serialVersionUID = 1L;
 
@@ -16,8 +14,6 @@ public class Customer implements Serializable {
     private String name;
     private Category category = Category.NA;
 
-    private List<Order> orders = new ArrayList<>();
-    
     public Customer() {
     }
 
@@ -35,14 +31,6 @@ public class Customer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public Category getCategory() {
@@ -81,6 +69,6 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return "Customer [name=" + name + ", orders=" + orders + "]";
+        return "Customer [id = " + customerId + ", name=" + name + ", category = " + category + "]";
     }
 }

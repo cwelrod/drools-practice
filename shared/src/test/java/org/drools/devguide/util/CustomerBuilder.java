@@ -32,7 +32,6 @@ public class CustomerBuilder {
         if (this.orderBuilder.isPresent()){
             Order order = this.orderBuilder.get().build();
             order.setCustomer(this.instance);
-            this.instance.getOrders().add(order);
         }
         this.orderBuilder = Optional.of(new OrderBuilder(this));
         return this.orderBuilder.get();
@@ -42,7 +41,6 @@ public class CustomerBuilder {
         if (this.orderBuilder.isPresent()){
             Order order = this.orderBuilder.get().build();
             order.setCustomer(this.instance);
-            this.instance.getOrders().add(order);
         }
         return instance;
     }
