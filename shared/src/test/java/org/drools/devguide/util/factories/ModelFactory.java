@@ -35,23 +35,23 @@ public class ModelFactory {
         items.add(item1);
         
         OrderLine item2 = new OrderLine();
-        item1.setItem(pB);
-        item1.setQuantity(2);
+        item2.setItem(pB);
+        item2.setQuantity(2);
         items.add(item2);
         
         OrderLine item3 = new OrderLine();
-        item1.setItem(pC);
-        item1.setQuantity(3);
+        item3.setItem(pC);
+        item3.setQuantity(3);
         items.add(item3);
         
         OrderLine item4 = new OrderLine();
-        item1.setItem(pD);
-        item1.setQuantity(4);
+        item4.setItem(pD);
+        item4.setQuantity(4);
         items.add(item4);
         
         OrderLine item5 = new OrderLine();
-        item1.setItem(pE);
-        item1.setQuantity(5);
+        item5.setItem(pE);
+        item5.setQuantity(5);
         items.add(item5);
         
         o.setItems(items);

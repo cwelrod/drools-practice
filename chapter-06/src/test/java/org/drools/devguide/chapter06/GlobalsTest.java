@@ -79,7 +79,7 @@ public class GlobalsTest extends BaseTest{
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
         Collection<SuspiciousOperation> suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
         assertThat(suspiciousOperations, hasSize(0));
 
         //Let's fire any activated rule now.
@@ -88,7 +88,7 @@ public class GlobalsTest extends BaseTest{
         //After the rules are fired, a SuspiciousOperation object is now 
         //present. This object belongs to Customer "A".
         suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(1));
         assertThat(suspiciousOperations.iterator().next().getCustomer().getCustomerId(),
@@ -148,7 +148,7 @@ public class GlobalsTest extends BaseTest{
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
         Collection<SuspiciousOperation> suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
         assertThat(suspiciousOperations, hasSize(0));
 
         //Let's fire any activated rule now.
@@ -157,7 +157,7 @@ public class GlobalsTest extends BaseTest{
         //After the rules are fired, 2 SuspiciousOperation objects are now 
         //present. These objects belong to Customer "A" and "B".
         suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(
@@ -232,7 +232,7 @@ public class GlobalsTest extends BaseTest{
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
         Collection<SuspiciousOperation> suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
         assertThat(suspiciousOperations, hasSize(0));
 
         //Let's fire any activated rule now.
@@ -241,7 +241,7 @@ public class GlobalsTest extends BaseTest{
         //After the rules are fired, 2 SuspiciousOperation objects are now 
         //present. These objects belong to Customer "A" and "B".
         suspiciousOperations
-                = this.getFactsFromSession(ksession, SuspiciousOperation.class);
+                = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(

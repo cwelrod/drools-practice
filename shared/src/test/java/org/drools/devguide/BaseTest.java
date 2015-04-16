@@ -31,7 +31,7 @@ public class BaseTest {
         return kContainer.newKieSession(name);
     }
 
-    protected <T> Collection<T> getFactsFromSession(KieSession ksession, Class<T> classType) {
+    protected <T> Collection<T> getFactsFromKieSession(KieSession ksession, Class<T> classType) {
         return (Collection<T>) ksession.getObjects(new ClassObjectFilter(classType));
     }
 
