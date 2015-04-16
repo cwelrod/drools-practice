@@ -31,12 +31,12 @@ public class ModelFactory {
         
         OrderLine item1 = new OrderLine();
         item1.setItem(pA);
-        item1.setQuantity(2);
+        item1.setQuantity(1);
         items.add(item1);
         
         OrderLine item2 = new OrderLine();
         item1.setItem(pB);
-        item1.setQuantity(1);
+        item1.setQuantity(2);
         items.add(item2);
         
         OrderLine item3 = new OrderLine();

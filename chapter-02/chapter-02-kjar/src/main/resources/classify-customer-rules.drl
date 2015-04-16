@@ -10,5 +10,5 @@ rule "Classify Customer by order size"
         $c: Customer(this == $customer, category == Customer.Category.NA)
     then
         $c.setCategory(Customer.Category.SILVER);
-        
+        update($c);
 end 

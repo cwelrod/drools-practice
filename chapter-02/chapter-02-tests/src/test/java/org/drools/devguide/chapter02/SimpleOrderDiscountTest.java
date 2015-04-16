@@ -6,6 +6,7 @@ package org.drools.devguide.chapter02;
  * and open the template in the editor.
  */
 import org.drools.devguide.BaseTest;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 import org.drools.devguide.util.factories.ModelFactory;
 import static org.hamcrest.CoreMatchers.is;
@@ -30,13 +31,20 @@ public class SimpleOrderDiscountTest extends BaseTest {
         kSession.insert(o.getCustomer());
         kSession.insert(o.getOrderLines().get(0));
         kSession.insert(o.getOrderLines().get(1));
+        kSession.insert(o.getOrderLines().get(2));
+        kSession.insert(o.getOrderLines().get(3));
+        kSession.insert(o.getOrderLines().get(4));
         kSession.insert(o.getOrderLines().get(0).getItem());
         kSession.insert(o.getOrderLines().get(1).getItem());
+        kSession.insert(o.getOrderLines().get(2).getItem());
+        kSession.insert(o.getOrderLines().get(3).getItem());
+        kSession.insert(o.getOrderLines().get(4).getItem());
         kSession.insert(o);
         
         int fired = kSession.fireAllRules();
 
-        assertThat(3, is(fired));
+        assertThat(4, is(fired));
+        assertThat(o.getCustomer().getCategory(), is(Customer.Category.SILVER));
         assertThat(o.getDiscount(), not(nullValue()));
         assertThat(o.getDiscount().getPercentage(), is(10.0));
 
