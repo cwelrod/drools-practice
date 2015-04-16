@@ -40,16 +40,16 @@ public class QueriesTest extends BaseTest{
     public void getAllSuspiciousOperationsWithOnDemandQuery(){
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -67,7 +67,7 @@ public class QueriesTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -117,16 +117,16 @@ public class QueriesTest extends BaseTest{
     public void getAllSuspiciousOperationsWithLiveQuery(){
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -144,7 +144,7 @@ public class QueriesTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)

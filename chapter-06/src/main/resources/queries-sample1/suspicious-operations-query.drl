@@ -15,7 +15,7 @@ rule "Detect suspicious amount operations"
 when
     $c: Customer()
     Number( doubleValue > amountThreshold ) from accumulate (
-        Order ( state != OrderState.COMPLETED, $total: total) from orderService.getOrdersByCustomer($c.id),
+        Order ( state != OrderState.COMPLETED, $total: total) from orderService.getOrdersByCustomer($c.customerId),
         sum($total)
     )
 then
@@ -27,5 +27,5 @@ query "Get All Suspicious Operations"
 end
 
 query "Get Customer Suspicious Operations" (String $customerId)
-    $so: SuspiciousOperation(customer.id == $customerId)
+    $so: SuspiciousOperation(customer.customerId == $customerId)
 end

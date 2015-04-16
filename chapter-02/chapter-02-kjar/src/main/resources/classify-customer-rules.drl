@@ -6,8 +6,9 @@ import org.drools.devguide.eshop.model.Customer;
 
 rule "Classify Customer by order size"
     when
-        $o: Order( $items : items.size >= 20, $customer: customer )
-        $c: Customer(this == $customer)
+        $o: Order( orderLines.size >= 5, $customer: customer )
+        $c: Customer(this == $customer, category == Customer.Category.NA)
     then
         $c.setCategory(Customer.Category.SILVER);
+        
 end 

@@ -44,7 +44,7 @@ public class OrderBuilder {
     
     public OrderLineBuilder newItem(){
         if (this.orderLineBuilder.isPresent()){
-            this.instance.getItems().add(this.orderLineBuilder.get().build());
+            this.instance.getOrderLines().add(this.orderLineBuilder.get().build());
         }
         this.orderLineBuilder = Optional.of(new OrderLineBuilder(this));
         return this.orderLineBuilder.get();
@@ -52,7 +52,7 @@ public class OrderBuilder {
     
     public Order build(){
         if (this.orderLineBuilder.isPresent()){
-            this.instance.getItems().add(this.orderLineBuilder.get().build());
+            this.instance.getOrderLines().add(this.orderLineBuilder.get().build());
         }
         return this.instance;
     }

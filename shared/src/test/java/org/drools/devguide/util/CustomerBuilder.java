@@ -6,7 +6,6 @@
 package org.drools.devguide.util;
 
 import java.util.Optional;
-import java.util.UUID;
 import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 
@@ -18,14 +17,14 @@ public class CustomerBuilder {
     
     private final Customer instance;
     private Optional<OrderBuilder> orderBuilder = Optional.empty();
-
+    private static Long customerIdGenerator = 0L;
     public CustomerBuilder() {
         instance = new Customer();
-        instance.setId(UUID.randomUUID().toString());
+        instance.setCustomerId(customerIdGenerator++);
     }
     
-    public CustomerBuilder withId(String id){
-        instance.setId(id);
+    public CustomerBuilder withId(Long id){
+        instance.setCustomerId(id);
         return this;
     }
     

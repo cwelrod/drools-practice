@@ -38,7 +38,7 @@ public class GlobalsTest extends BaseTest{
 
         //Create a customer with PENDING orders for a value > 10000
         Customer customerA = new CustomerBuilder()
-                .withId("A")
+                .withId(1L)
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
@@ -58,7 +58,7 @@ public class GlobalsTest extends BaseTest{
 
         //Create a customer with PENDING orders for a value < 10000 
         Customer customerB = new CustomerBuilder()
-                .withId("B")
+                .withId(2L)
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
@@ -91,8 +91,8 @@ public class GlobalsTest extends BaseTest{
                 = this.getFactsFromSession(ksession, SuspiciousOperation.class);
 
         assertThat(suspiciousOperations, hasSize(1));
-        assertThat(suspiciousOperations.iterator().next().getCustomer().getId(),
-                is("A"));
+        assertThat(suspiciousOperations.iterator().next().getCustomer().getCustomerId(),
+                is(1L));
 
         ksession.dispose();
 
@@ -103,7 +103,7 @@ public class GlobalsTest extends BaseTest{
 
         //Create a customer with PENDING orders for a value > 10000
         Customer customerA = new CustomerBuilder()
-                .withId("A")
+                .withId(1L)
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
@@ -123,7 +123,7 @@ public class GlobalsTest extends BaseTest{
 
         //Create a customer with PENDING orders for a value < 10000 
         Customer customerB = new CustomerBuilder()
-                .withId("B")
+                .withId(2L)
                 .newOrder()
                     .withSate(OrderState.PENDING)
                     .newItem()
@@ -161,8 +161,8 @@ public class GlobalsTest extends BaseTest{
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(
-                suspiciousOperations.stream().map(so -> so.getCustomer().getId()).collect(toList())
-                , containsInAnyOrder("A", "B")
+                suspiciousOperations.stream().map(so -> so.getCustomer().getCustomerId()).collect(toList())
+                , containsInAnyOrder(1L, 2L)
         );
         
     }
@@ -172,16 +172,16 @@ public class GlobalsTest extends BaseTest{
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -199,7 +199,7 @@ public class GlobalsTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -245,8 +245,8 @@ public class GlobalsTest extends BaseTest{
 
         assertThat(suspiciousOperations, hasSize(2));
         assertThat(
-                suspiciousOperations.stream().map(so -> so.getCustomer().getId()).collect(toList())
-                , containsInAnyOrder("A", "B")
+                suspiciousOperations.stream().map(so -> so.getCustomer().getCustomerId()).collect(toList())
+                , containsInAnyOrder(1L, 2L)
         );
         
     }
@@ -256,16 +256,16 @@ public class GlobalsTest extends BaseTest{
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -283,7 +283,7 @@ public class GlobalsTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -325,8 +325,8 @@ public class GlobalsTest extends BaseTest{
         //present in the 'results' Set.
         assertThat(results, hasSize(2));
         assertThat(
-                results.stream().map(so -> so.getCustomer().getId()).collect(toList())
-                , containsInAnyOrder("A", "B")
+                results.stream().map(so -> so.getCustomer().getCustomerId()).collect(toList())
+                , containsInAnyOrder(1L, 2L)
         );
         
     }
@@ -336,16 +336,16 @@ public class GlobalsTest extends BaseTest{
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -363,7 +363,7 @@ public class GlobalsTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -413,8 +413,8 @@ public class GlobalsTest extends BaseTest{
         //present in the 'results' Set.
         assertThat(results, hasSize(2));
         assertThat(
-                results.stream().map(so -> so.getCustomer().getId()).collect(toList())
-                , containsInAnyOrder("A", "B")
+                results.stream().map(so -> so.getCustomer().getCustomerId()).collect(toList())
+                , containsInAnyOrder(1L, 2L)
         );
         
     }

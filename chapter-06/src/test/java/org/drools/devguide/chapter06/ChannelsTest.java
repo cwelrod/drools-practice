@@ -37,16 +37,16 @@ public class ChannelsTest extends BaseTest{
     public void detectSuspiciousAmountOperationsNotifyAuditService() throws FileNotFoundException {
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId("A").build();
-        Customer customerB = new CustomerBuilder().withId("B").build();
+        Customer customerA = new CustomerBuilder().withId(1L).build();
+        Customer customerB = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
 
             @Override
-            public Collection<Order> getOrdersByCustomer(String customerId) {
-                switch (customerId){
-                    case "A":
+            public Collection<Order> getOrdersByCustomer(Long customerId) {
+                switch (customerId.toString()){
+                    case "1":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -64,7 +64,7 @@ public class ChannelsTest extends BaseTest{
                                     .end()
                             .build()
                         );
-                    case "B":
+                    case "2":
                         return Arrays.asList(
                             new OrderBuilder(null)
                                     .withSate(OrderState.PENDING)
@@ -118,8 +118,8 @@ public class ChannelsTest extends BaseTest{
         //present in the 'results' Set.
         assertThat(results, hasSize(2));
         assertThat(
-                results.stream().map(so -> so.getCustomer().getId()).collect(toList())
-                , containsInAnyOrder("A", "B")
+                results.stream().map(so -> so.getCustomer().getCustomerId()).collect(toList())
+                , containsInAnyOrder(1L, 2L)
         );
     }
 

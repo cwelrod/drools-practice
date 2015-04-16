@@ -5,8 +5,8 @@ import org.drools.devguide.eshop.model.Discount;
 
 rule "High Range Order - 10% Discount"
     when
-        $o: Order( $items : items.size >= 2 )
-        forall( OrderLine( this memberOf $items,  $item : item)
+        $o: Order( $lines : orderLines.size >= 2 )
+        forall( OrderLine( this memberOf $lines,  $item : item)
                 Item(this == $item, category == Item.Category.HIGH_RANGE)
         )
     then
