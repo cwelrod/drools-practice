@@ -8,6 +8,7 @@ package org.drools.devguide.util;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
+import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
 import org.drools.devguide.eshop.model.OrderState;
 
@@ -17,15 +18,14 @@ import org.drools.devguide.eshop.model.OrderState;
  */
 public class OrderBuilder {
     
-    private final CustomerBuilder superBuilder;
     private final Order instance;
     private Optional<OrderLineBuilder> orderLineBuilder = Optional.empty();
     
-    public OrderBuilder(CustomerBuilder superBuilder) {
-        this.superBuilder = superBuilder;
-        
+    public OrderBuilder(Customer customer) {
         this.instance = new Order();
+        
         //default values for the new Order
+        this.instance.setCustomer(customer);
         this.instance.setState(OrderState.PENDING);
         this.instance.setDate(new Date());
         this.instance.setItems(new ArrayList<>());
@@ -42,7 +42,7 @@ public class OrderBuilder {
         return this;
     }
     
-    public OrderLineBuilder newItem(){
+    public OrderLineBuilder newLine(){
         if (this.orderLineBuilder.isPresent()){
             this.instance.getOrderLines().add(this.orderLineBuilder.get().build());
         }
@@ -57,7 +57,7 @@ public class OrderBuilder {
         return this.instance;
     }
     
-    public CustomerBuilder end(){
-        return superBuilder;
+    public OrderBuilder end(){
+        return this;
     }
 }

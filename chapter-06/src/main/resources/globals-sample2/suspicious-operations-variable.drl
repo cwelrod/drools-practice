@@ -11,7 +11,7 @@ rule "Detect suspicious amount operations"
 when
     $c: Customer()
     Number( doubleValue > amountThreshold ) from accumulate (
-        Order ( customer == $c, state != OrderState.COMPLETED, $total: total) from $c.orders,
+        Order ( customer == $c, state != OrderState.COMPLETED, $total: total),
         sum($total)
     )
 then

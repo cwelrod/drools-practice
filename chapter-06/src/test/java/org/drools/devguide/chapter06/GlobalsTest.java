@@ -14,12 +14,11 @@ import org.drools.devguide.BaseTest;
 import static java.util.stream.Collectors.toList;
 import org.drools.devguide.eshop.model.Customer;
 import org.drools.devguide.eshop.model.Order;
-import org.drools.devguide.eshop.model.OrderState;
 import org.drools.devguide.eshop.model.SuspiciousOperation;
 import org.drools.devguide.eshop.service.AuditService;
 import org.drools.devguide.eshop.service.OrderService;
 import org.drools.devguide.util.CustomerBuilder;
-import org.drools.devguide.util.OrderBuilder;
+import org.drools.devguide.util.factories.ModelFactory;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -35,46 +34,26 @@ public class GlobalsTest extends BaseTest{
 
     @Test
     public void detectSuspiciousAmountOperationsWithFixedThresholdTest() {
-
+        
         //Create a customer with PENDING orders for a value > 10000
-        Customer customerA = new CustomerBuilder()
-                .withId(1L)
-                .newOrder()
-                    .withSate(OrderState.PENDING)
-                    .newItem()
-                        .withQuantity(2)
-                        .withItem()
-                        .withSalePrice(5000.0)
-                        .end()
-                    .end()
-                    .newItem()
-                        .withQuantity(5)
-                        .withItem()
-                        .withSalePrice(800.0)
-                    .end()
-                .end()
-            .end()
-        .build();
+        Customer customer1 = new CustomerBuilder()
+                .withId(1L).build();
+        
+        Order customer1Order = ModelFactory.getPendingOrderWithTotalValueGraterThan10000(customer1);
 
         //Create a customer with PENDING orders for a value < 10000 
-        Customer customerB = new CustomerBuilder()
-                .withId(2L)
-                .newOrder()
-                    .withSate(OrderState.PENDING)
-                    .newItem()
-                        .withQuantity(1)
-                        .withItem()
-                        .withSalePrice(1000.0)
-                        .end()
-                    .end()
-                .end()
-        .build();
+        Customer customer2 = new CustomerBuilder()
+                .withId(2L).build();
+        
+        Order customer2Order = ModelFactory.getPendingOrderWithTotalValueLessThan10000(customer2);
 
-        //Create a session and insert the 2 patients.
+        //Create a session and insert the 2 customers and their orders.
         KieSession ksession = this.createSession("suspicious-operations-fixed");
 
-        ksession.insert(customerA);
-        ksession.insert(customerB);
+        ksession.insert(customer1);
+        ksession.insert(customer1Order);
+        ksession.insert(customer2);
+        ksession.insert(customer2Order);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -86,7 +65,7 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, a SuspiciousOperation object is now 
-        //present. This object belongs to Customer "A".
+        //present. This object belongs to Customer "1".
         suspiciousOperations
                 = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
@@ -102,48 +81,28 @@ public class GlobalsTest extends BaseTest{
     public void detectSuspiciousAmountOperationsWithVariableThresholdTest() {
 
         //Create a customer with PENDING orders for a value > 10000
-        Customer customerA = new CustomerBuilder()
-                .withId(1L)
-                .newOrder()
-                    .withSate(OrderState.PENDING)
-                    .newItem()
-                        .withQuantity(2)
-                        .withItem()
-                        .withSalePrice(5000.0)
-                    .end()
-                .end()
-                    .newItem()
-                        .withQuantity(5)
-                        .withItem()
-                        .withSalePrice(800.0)
-                    .end()
-                .end()
-            .end()
-        .build();
+        Customer customer1 = new CustomerBuilder()
+                .withId(1L).build();
+        
+        Order customer1Order = ModelFactory.getPendingOrderWithTotalValueGraterThan10000(customer1);
 
         //Create a customer with PENDING orders for a value < 10000 
-        Customer customerB = new CustomerBuilder()
-                .withId(2L)
-                .newOrder()
-                    .withSate(OrderState.PENDING)
-                    .newItem()
-                        .withQuantity(1)
-                        .withItem()
-                        .withSalePrice(1000.0)
-                    .end()
-                .end()
-            .end()
-        .build();
+        Customer customer2 = new CustomerBuilder()
+                .withId(2L).build();
+        
+        Order customer2Order = ModelFactory.getPendingOrderWithTotalValueLessThan10000(customer2);
 
-        //Create a session
+        //Create a session and insert the 2 customers and their orders.
         KieSession ksession = this.createSession("suspicious-operations-variable");
         
         //Before we insert any fact, we set the value of 'amountThreshold' global
         //to 500.0
         ksession.setGlobal("amountThreshold", 500.0);
 
-        ksession.insert(customerA);
-        ksession.insert(customerB);
+        ksession.insert(customer1);
+        ksession.insert(customer1Order);
+        ksession.insert(customer2);
+        ksession.insert(customer2Order);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -155,7 +114,7 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, 2 SuspiciousOperation objects are now 
-        //present. These objects belong to Customer "A" and "B".
+        //present. These objects belong to Customer "1" and "2".
         suspiciousOperations
                 = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
@@ -172,8 +131,8 @@ public class GlobalsTest extends BaseTest{
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId(1L).build();
-        Customer customerB = new CustomerBuilder().withId(2L).build();
+        final Customer customer1 = new CustomerBuilder().withId(1L).build();
+        final Customer customer2 = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
@@ -183,33 +142,11 @@ public class GlobalsTest extends BaseTest{
                 switch (customerId.toString()){
                     case "1":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(2)
-                                        .withItem()
-                                        .withSalePrice(5000.0)
-                                        .end()
-                                    .end()
-                                    .newItem()
-                                        .withQuantity(5)
-                                        .withItem()
-                                        .withSalePrice(800.0)
-                                        .end()
-                                    .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueGraterThan10000(customer1)
                         );
                     case "2":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(1)
-                                        .withItem()
-                                        .withSalePrice(1000.0)
-                                    .end()
-                                .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueLessThan10000(customer2)
                         );
                     default:
                         return Collections.EMPTY_LIST;
@@ -226,8 +163,8 @@ public class GlobalsTest extends BaseTest{
         ksession.setGlobal("amountThreshold", 500.0);
         ksession.setGlobal("orderService", orderService);
 
-        ksession.insert(customerA);
-        ksession.insert(customerB);
+        ksession.insert(customer1);
+        ksession.insert(customer2);
 
         //Before we fire any activated rule, we check that the session doesn't
         //have any object of type SuspiciousOperation in it.
@@ -239,7 +176,7 @@ public class GlobalsTest extends BaseTest{
         ksession.fireAllRules();
 
         //After the rules are fired, 2 SuspiciousOperation objects are now 
-        //present. These objects belong to Customer "A" and "B".
+        //present. These objects belong to Customer "1" and "2".
         suspiciousOperations
                 = this.getFactsFromKieSession(ksession, SuspiciousOperation.class);
 
@@ -256,8 +193,8 @@ public class GlobalsTest extends BaseTest{
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId(1L).build();
-        Customer customerB = new CustomerBuilder().withId(2L).build();
+        Customer customer1 = new CustomerBuilder().withId(1L).build();
+        Customer customer2 = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
@@ -267,33 +204,11 @@ public class GlobalsTest extends BaseTest{
                 switch (customerId.toString()){
                     case "1":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(2)
-                                        .withItem()
-                                        .withSalePrice(5000.0)
-                                        .end()
-                                    .end()
-                                    .newItem()
-                                        .withQuantity(5)
-                                        .withItem()
-                                        .withSalePrice(800.0)
-                                        .end()
-                                    .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueGraterThan10000(customer1)
                         );
                     case "2":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(1)
-                                        .withItem()
-                                        .withSalePrice(1000.0)
-                                    .end()
-                                .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueLessThan10000(customer2)
                         );
                     default:
                         return Collections.EMPTY_LIST;
@@ -315,8 +230,8 @@ public class GlobalsTest extends BaseTest{
         Set<SuspiciousOperation> results = new HashSet<>();
         ksession.setGlobal("results", results);
 
-        ksession.insert(customerA);
-        ksession.insert(customerB);
+        ksession.insert(customer1);
+        ksession.insert(customer2);
 
         //Let's fire any activated rule now.
         ksession.fireAllRules();
@@ -331,13 +246,14 @@ public class GlobalsTest extends BaseTest{
         
     }
     
+    
     @Test
     public void detectSuspiciousAmountOperationsNotifyAuditService() {
 
         //Create 2 customers without any Order. Orders are going to be provided
         //by the OrderService.
-        Customer customerA = new CustomerBuilder().withId(1L).build();
-        Customer customerB = new CustomerBuilder().withId(2L).build();
+        Customer customer1 = new CustomerBuilder().withId(1L).build();
+        Customer customer2 = new CustomerBuilder().withId(2L).build();
 
         //Mock an instance of OrderService
         OrderService orderService = new OrderService() {
@@ -347,33 +263,11 @@ public class GlobalsTest extends BaseTest{
                 switch (customerId.toString()){
                     case "1":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(2)
-                                        .withItem()
-                                        .withSalePrice(5000.0)
-                                        .end()
-                                    .end()
-                                    .newItem()
-                                        .withQuantity(5)
-                                        .withItem()
-                                        .withSalePrice(800.0)
-                                        .end()
-                                    .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueGraterThan10000(customer1)
                         );
                     case "2":
                         return Arrays.asList(
-                            new OrderBuilder(null)
-                                    .withSate(OrderState.PENDING)
-                                    .newItem()
-                                        .withQuantity(1)
-                                        .withItem()
-                                        .withSalePrice(1000.0)
-                                    .end()
-                                .end()
-                            .build()
+                            ModelFactory.getPendingOrderWithTotalValueLessThan10000(customer2)
                         );
                     default:
                         return Collections.EMPTY_LIST;
@@ -403,8 +297,8 @@ public class GlobalsTest extends BaseTest{
         ksession.setGlobal("orderService", orderService);
         ksession.setGlobal("auditService", auditService);
         
-        ksession.insert(customerA);
-        ksession.insert(customerB);
+        ksession.insert(customer1);
+        ksession.insert(customer2);
 
         //Let's fire any activated rule now.
         ksession.fireAllRules();
@@ -418,5 +312,5 @@ public class GlobalsTest extends BaseTest{
         );
         
     }
-    
+   
 }
