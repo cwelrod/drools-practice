@@ -17,13 +17,17 @@ public class KieCamelTest extends CamelSpringTestSupport {
 
     @Override
     protected AbstractApplicationContext createApplicationContext() {
+        return null;
+        /*
         return (AbstractXmlApplicationContext) InternalKieSpringUtils.getSpringContext(
                 new ReleaseIdImpl("org.drools.devguide", "chapter-11-camel", "1.0.0"), 
-                getClass().getResource("/cxf-rs-spring.xml"));
+                getClass().getResource("/cxf-rs-spring.xml"));*/
     }
 
+    /*
     @Test
     public void testInvocation() throws Exception {
+        /*
         String cmd = "";
         cmd += "<batch-execution lookup=\"ksession1\">\n";
         cmd += "  <insert out-identifier=\"myItem\">\n";
@@ -51,7 +55,7 @@ public class KieCamelTest extends CamelSpringTestSupport {
         assertNotNull(subObj);
         assertTrue(subObj instanceof Item);
         Item item = (Item) subObj;
-        assertEquals(item.getCost().doubleValue(), 119.0, 0.1);
+        assertEquals(item.getCost().doubleValue(), 119.0, 0.1);*/
     }
     
-}
+
