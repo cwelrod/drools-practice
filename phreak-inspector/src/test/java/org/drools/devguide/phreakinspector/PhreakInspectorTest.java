@@ -39,8 +39,8 @@ public class PhreakInspectorTest {
 
         InputStream graphViz = inspector.fromResources(resources);
 
-//        this.writeTmpFile(graphViz);
-        this.writeToFixedTmpFile(graphViz);
+        this.writeTmpFile(graphViz);
+        //this.writeToFixedTmpFile(graphViz);
     }
 
     private void writeTmpFile(InputStream is) throws IOException {
